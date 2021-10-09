@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProbeDataRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProbeDataRepository::class)
@@ -24,14 +25,16 @@ class ProbeData
     private $probe;
 
     /**
-     * @ORM\Column(type="date")
+     * @Groups("probedata")
+     * @ORM\Column(type="date", nullable=false)
      */
     private $date;
 
     /**
-     * @ORM\Column(type="json")
+     * @Groups("probedata")
+     * @ORM\Column(type="string", nullable=false)
      */
-    private $value = [];
+    private $value;
 
     public function getId(): ?int
     {
@@ -62,12 +65,12 @@ class ProbeData
         return $this;
     }
 
-    public function getValue(): ?array
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function setValue(array $value): self
+    public function setValue(string $value): self
     {
         $this->value = $value;
 

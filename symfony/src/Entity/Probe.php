@@ -6,6 +6,7 @@ use App\Repository\ProbeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProbeRepository::class)
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Probe
 {
     /**
+     * @Groups("probegroup")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,6 +22,7 @@ class Probe
     private $id;
 
     /**
+     * @Groups("probegroup")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
