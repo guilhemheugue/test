@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+  db:
+    container_name: "database"
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/data/postgres
+      - ./logs:/var/log/postgresql
+    networks:
+      - dev
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - dev
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_docker_symfony
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "8081:80"
+    restart: always
+    networks:
+        - dev
+
+  php:
+    container_name: "php-fpm"
+    build:
+      context: ./php
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+    volumes:
+      - ${SYMFONY_FOLDER}:/var/www/
+      - ./php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    networks:
+      - dev
+
+  nginx:
+    container_name: "nginx"
+    build:
+      context: ./nginx
+    volumes:
+      - ${SYMFONY_FOLDER}:/var/www/
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./logs:/var/log
+    depends_on:
+      - php
+    ports:
+      - "8080:80"
+    networks:
+      - dev
+
+  angular:
+    container_name: "angular_docker"
+    build:
+      context: ./js
+    volumes:
+      - ${ANGULAR_FOLDER}:/var/www/
+    ports:
+      - "80:4200"
+    command: ng serve --host angular_docker
+    networks:
+      - dev
+
+networks:
+    dev:
+
+volumes:
+  pgadmin-data:
+  db-data:
