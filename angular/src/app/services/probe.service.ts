@@ -7,14 +7,6 @@ interface Probe {
     name: string;
 }
 
-function wait(ms: any) {
-    var start = new Date().getTime();
-    var end = start;
-    while (end < start + ms) {
-        end = new Date().getTime();
-    }
-}
-
 @Injectable()
 export class ProbeService {
     private probeSubject = new Subject<Probe[]>();
@@ -45,9 +37,9 @@ export class ProbeService {
         this.probeSubject.next(this.probes.slice());
     }
 
-    getProbesFromServer() {
+    getProbesFromServer(auth: string) {
         this.httpClient
-            .get<Probe[]>('http://localhost:8080/probes/')
+            .get<Probe[]>('http://localhost:8080/probes/?auth=' + auth)
             .subscribe(
                 (response) => {
                     this.setProbes(response);

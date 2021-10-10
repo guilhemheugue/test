@@ -1,0 +1,12 @@
+<h2>Authentification</h2>
+
+<form *ngIf="!authStatus" (ngSubmit)="onSignIn(f)" #f="ngForm">
+    <div class="form-group">
+        <label for="password">
+            Mot de passe
+        </label>
+        <input type="password" id="name" class="form-control" name="password" ngModel required>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="f.invalid">Connexion</button>
+</form>
+<button class="btn btn-danger" *ngIf="authStatus" (click)="onSignOut()">Se déconnecter</button>

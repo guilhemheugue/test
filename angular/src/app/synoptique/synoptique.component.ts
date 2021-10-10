@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 import { ProbeService } from '../services/probe.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class SynoptiqueComponent implements OnInit {
   probes: any[] | undefined;
   probeSubscription: Subscription | undefined;
 
-  constructor(private probeService: ProbeService) { }
+  constructor(private probeService: ProbeService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.probeSubscription = this.probeService.getProbeSubject().subscribe(
@@ -21,7 +22,9 @@ export class SynoptiqueComponent implements OnInit {
       }
     );
     this.probeService.emitProbeSubject();
-    this.probeService.getProbesFromServer();
+    if (this.authService.auth) {
+      this.probeService.getProbesFromServer(this.authService.auth);
+    }
   }
 
 }

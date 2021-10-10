@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-probe-view',
@@ -10,7 +11,7 @@ export class ProbeViewComponent implements OnInit {
   @Input() id: number | undefined;
   @Input() name: string | undefined;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
