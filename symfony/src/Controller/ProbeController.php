@@ -61,7 +61,8 @@ class ProbeController extends AbstractController
      */
     public function login(Request $request)
     {
-        if (($password = $request->request->get('password')) && $password === "toto") {
+        $json = json_decode($request->getContent(), true);
+        if ($json && array_key_exists("password", $json) && $json['password'] === "toto") {
             return new JsonResponse(array("auth-id" => $this->authId));
         } else {
             return new JsonResponse(array("error" => "Bad login"), 401);
