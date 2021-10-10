@@ -34,6 +34,7 @@ class ProbeDataRepository extends ServiceEntityRepository
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
             ->setParameter('probe', $probe)
+            ->orderBy('d.date', 'ASC')
             ->getQuery()
             ->getResult();
     }

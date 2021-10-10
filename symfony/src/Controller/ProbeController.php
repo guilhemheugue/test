@@ -34,7 +34,7 @@ class ProbeController extends AbstractController
         if (
             ($begin = DateTime::createFromFormat("Y-m-d\Th:i:sP", $request->query->get('begin'))) !== false
             &&
-            ($end = DateTime::createFromFormat("Y-m-d\Th:i:sP", $request->query->get('end')))
+            ($end = DateTime::createFromFormat("Y-m-d\Th:i:sP", $request->query->get('end'))) !== false
         ) {
             $data = $dataRepo->findByDateBetween($probe, $begin, $end);
             $jsonData = $s->serialize($data, 'json', ['groups' => 'probedata']);
