@@ -20,7 +20,6 @@ export class AuthComponent implements OnInit {
 
   onSignIn(form: NgForm) {
     const password = form.value['password'];
-    console.log(password);
     this.authService.signIn(password).then(
       () => {
         console.log('Sign in successful!');

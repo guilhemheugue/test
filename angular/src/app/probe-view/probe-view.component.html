@@ -1,6 +1,6 @@
 <div>
-    <div>
+    <a routerLink="/probe/{{id}}">
         {{ name }}
-    </div>
-    <a routerLink="/probe/{{id}}">Détail</a>
+    </a>
+    <div>{{ mesure?.value }}</div>
 </div>

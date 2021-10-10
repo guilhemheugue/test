@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { formatDate } from '@angular/common';
 
-interface Mesure {
+export interface Mesure {
     date: Date;
     value: string;
 }
@@ -26,7 +26,6 @@ export class MesureService {
     }
 
     getMesuresFromServer(probeId: number, auth: string, begin: Date | undefined, end: Date | undefined) {
-        console.log("coucou");
         var uriParams = "?auth=" + auth;
         if (begin != undefined && end != undefined) {
             var beginUri = encodeURIComponent(formatDate(begin, 'yyyy-MM-dd\Thh:mm:ssZ', 'en'));

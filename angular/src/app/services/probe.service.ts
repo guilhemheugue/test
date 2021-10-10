@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
-interface Probe {
+export interface Probe {
     id: number;
     name: string;
 }
@@ -14,12 +14,7 @@ export class ProbeService {
     constructor(private httpClient: HttpClient) {
     }
 
-    private probes: Probe[] = [
-        {
-            id: 1,
-            name: "test",
-        }
-    ];
+    private probes: Probe[] = [];
 
     getProbeSubject(): Subject<Probe[]> {
         return this.probeSubject;

@@ -17,9 +17,13 @@ export class ProbeShowComponent implements OnInit {
   mesures: any[] | undefined;
   mesuresSubscription: Subscription | undefined;
 
+  begin: Date = new Date();
+  end: Date = new Date();
+
   constructor(private probeService: ProbeService, private mesureService: MesureService, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.begin.setMonth(this.begin.getMonth() - 1);
     const id = this.route.snapshot.params['id'];
     this.mesuresSubscription = this.mesureService.getMesureSubject().subscribe(
       (mesures: any[]) => {
@@ -28,10 +32,16 @@ export class ProbeShowComponent implements OnInit {
     );
     this.mesureService.emitMesureSubject();
     this.name = this.probeService.getProbeById(id)?.name;
-    var begin = new Date();
-    begin.setMonth(begin.getMonth() - 1);
+
     if (this.authService.auth) {
-      this.mesureService.getMesuresFromServer(id, this.authService.auth, begin, new Date());
+      this.mesureService.getMesuresFromServer(id, this.authService.auth, this.begin, this.end);
+    }
+  }
+
+  updateGraph(): void {
+    const id = this.route.snapshot.params['id'];
+    if (this.authService.auth) {
+      this.mesureService.getMesuresFromServer(id, this.authService.auth, this.begin, this.end);
     }
   }
 

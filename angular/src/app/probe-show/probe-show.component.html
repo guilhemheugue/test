@@ -1,6 +1,13 @@
 <div>
     <h4>{{ getName() }}</h4>
-
+    <label for="begin">
+        Borne de début
+    </label>
+    <input type="date" name="begin" (change)="updateGraph()" class="form-control" [(ngModel)]="begin">
+    <label for="end">
+        Borne de fin
+    </label>
+    <input type="date" name="end" (change)="updateGraph()" class="form-control" [(ngModel)]="end">
     <ul>
         <li *ngFor="let mesure of mesures">{{mesure.date}} : {{mesure.value}}</li>
     </ul>
