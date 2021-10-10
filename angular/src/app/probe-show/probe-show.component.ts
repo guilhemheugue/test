@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 import { MesureService } from '../services/mesure.service';
+import { ProbeService } from '../services/probe.service';
 
 @Component({
   selector: 'app-probe-show',
@@ -9,27 +12,26 @@ import { MesureService } from '../services/mesure.service';
 })
 export class ProbeShowComponent implements OnInit {
 
-  @Input() id: number | undefined;
-  @Input() name: string | undefined;
+  name: string | undefined;
 
   mesures: any[] | undefined;
   mesuresSubscription: Subscription | undefined;
 
-  constructor(private mesureService: MesureService) { }
+  constructor(private probeService: ProbeService, private mesureService: MesureService, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
     this.mesuresSubscription = this.mesureService.getMesureSubject().subscribe(
       (mesures: any[]) => {
         this.mesures = mesures;
       }
     );
     this.mesureService.emitMesureSubject();
-    if (this.id) {
-
-      var begin = new Date();
-      begin.setMonth(begin.getMonth() - 1);
-
-      this.mesureService.getMesuresFromServer(this.id, begin, new Date());
+    this.name = this.probeService.getProbeById(id)?.name;
+    var begin = new Date();
+    begin.setMonth(begin.getMonth() - 1);
+    if (this.authService.auth) {
+      this.mesureService.getMesuresFromServer(id, this.authService.auth, begin, new Date());
     }
   }
 

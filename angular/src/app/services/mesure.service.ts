@@ -25,13 +25,14 @@ export class MesureService {
         this.mesuresSubject.next(this.mesures.slice());
     }
 
-    getMesuresFromServer(probeId: number, begin: Date | undefined, end: Date | undefined) {
-        var uriParams = "";
+    getMesuresFromServer(probeId: number, auth: string, begin: Date | undefined, end: Date | undefined) {
+        console.log("coucou");
+        var uriParams = "?auth=" + auth;
         if (begin != undefined && end != undefined) {
             var beginUri = encodeURIComponent(formatDate(begin, 'yyyy-MM-dd\Thh:mm:ssZ', 'en'));
             var endUri = encodeURIComponent(formatDate(end, 'yyyy-MM-dd\Thh:mm:ssZ', 'en'));
 
-            uriParams = "?begin=" + beginUri + "&end=" + endUri;
+            uriParams = uriParams + "&begin=" + beginUri + "&end=" + endUri;
         }
         console.log('http://localhost:8080/probes/' + probeId + uriParams);
         this.httpClient

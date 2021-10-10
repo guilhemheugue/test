@@ -18,7 +18,6 @@ const appRoutes: Routes = [
   { path: 'synoptique', canActivate: [AuthGuard], component: SynoptiqueComponent },
   { path: 'probe/:id', canActivate: [AuthGuard], component: ProbeShowComponent },
   { path: 'auth', component: AuthComponent },
-  { path: '**', redirectTo: 'not-found' },
   { path: '', redirectTo: 'synoptique', pathMatch: 'full' }
 ];
 
