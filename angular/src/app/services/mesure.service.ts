@@ -1,6 +1,7 @@
 import { Subject } from "rxjs";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { formatDate } from '@angular/common';
 
 interface Mesure {
     date: Date;
@@ -16,6 +17,10 @@ export class MesureService {
 
     private mesures: Mesure[] = [];
 
+    getMesureSubject(): Subject<Mesure[]> {
+        return this.mesuresSubject;
+    }
+
     emitMesureSubject() {
         this.mesuresSubject.next(this.mesures.slice());
     }
@@ -23,10 +28,14 @@ export class MesureService {
     getMesuresFromServer(probeId: number, begin: Date | undefined, end: Date | undefined) {
         var uriParams = "";
         if (begin != undefined && end != undefined) {
-            uriParams = "?begin=" + begin + "&end=" + end;
+            var beginUri = encodeURIComponent(formatDate(begin, 'yyyy-MM-dd\Thh:mm:ssZ', 'en'));
+            var endUri = encodeURIComponent(formatDate(end, 'yyyy-MM-dd\Thh:mm:ssZ', 'en'));
+
+            uriParams = "?begin=" + beginUri + "&end=" + endUri;
         }
+        console.log('http://localhost:8080/probes/' + probeId + uriParams);
         this.httpClient
-            .get<Mesure[]>('http://php-fpm/probes/' + probeId + uriParams)
+            .get<Mesure[]>('http://localhost:8080/probes/' + probeId + uriParams)
             .subscribe(
                 (response) => {
                     this.mesures = response;
